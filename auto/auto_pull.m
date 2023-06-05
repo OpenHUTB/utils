@@ -1,14 +1,9 @@
 %% 自动pull
-% run command: 
-% 1. enter the directory in auto_pull.m
-% 2. mr auto_pull &
-% crash log: /home/ubuntu/matlab_crash_dump.31983-1
-
-clc;
-
-cur_dir = pwd;
-
-while true
+function auto_pull(rep)
+    cur_dir = pwd;
+    if exist(rep, 'dir')
+        eval(strcat("cd ", rep));
+    end
     % 当远程有更新 且 本地没有修改 时，则执行 pull
     if isunix  % 将目标支持的语言设置为英文
         % show support language: echo $LANG
@@ -28,5 +23,7 @@ while true
         [pull_status, pull_info] = system('git pull');
         disp(pull_info);
     end
+    
+    eval(strcat("cd ", cur_dir));
     pause(1);
 end
