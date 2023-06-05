@@ -64,10 +64,10 @@ rep_dir = fullfile(fileparts(matlabroot), 'dong');
 % 工作空间（仓库所置的路径）
 work_dir = fullfile("C:", "workspace");
 if ~exist(work_dir, 'dir'); clear("work_dir"); end
-%% 
-% 添加path路径
 
-% add_path();
+hutb_rep = "https://github.com/OpenHUTB/utils";
+
+
 %% 
 % 后续操作
 
@@ -120,15 +120,17 @@ add_path()
 end
 % 添加path路径
 
-function add_path()
-work_dir = fullfile('C:', 'BaiduSyncdisk');
-if ~exist(work_dir, 'dir')
-    work_dir = fullfile('D:', 'BaiduSyncdisk');
-end
-proj_home_dir = fullfile(work_dir, 'dong');
 
-addpath(genpath(fullfile(proj_home_dir, 'utils')));  % 添加工具包中的所有路径
-addpath(fullfile(proj_home_dir, 'utils'));
+%%
+function add_path()
+work_dir = fullfile('C:', 'workspace');
+if ~exist(work_dir, 'dir')
+    work_dir = fullfile('D:', 'workspace');
+end
+% proj_home_dir = fullfile(work_dir, 'dong');
+
+addpath(genpath(fullfile(work_dir, 'utils')));  % 添加工具包中的所有路径
+% addpath(fullfile(proj_home_dir, 'utils'));
 % customPath = fullfile(proj_home_dir, 'utils', 'custom');  % 添加自定义脚本的路径
 % addpath(customPath);
 % % 添加快捷方式的路径
@@ -138,8 +140,10 @@ savepath
 % 显示当前文件夹以及当前搜索路径中的所有 pathdef.m 文件的路径
 % which pathdef.m -all
 end
-% 得到matlab版本信息
 
+
+%%
+% 得到matlab版本信息
 function ver_info = get_ver()
 % R2022a
 ver_info = version;
