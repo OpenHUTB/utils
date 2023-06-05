@@ -23,7 +23,7 @@ function auto_pull(rep)
         [pull_status, pull_info] = system('git pull');
         disp(pull_info);
     end
-    
+
     eval(strcat("cd ", cur_dir));
-    pause(1);
+    pause(0.1);
 end

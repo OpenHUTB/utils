@@ -60,6 +60,10 @@ latex_exe_dir = fullfile(latex_dir, 'bin', 'windows'); % latex 2023
 
 % 工程目录
 rep_dir = fullfile(fileparts(matlabroot), 'dong');
+
+% 工作空间（仓库所置的路径）
+work_dir = fullfile("C:", "workspace");
+if ~exist(work_dir, 'dir'); clear("work_dir"); end
 %% 
 % 添加path路径
 
