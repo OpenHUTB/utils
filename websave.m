@@ -1,4 +1,4 @@
-% dataFolder = tempdir;
+% dataFolder = tempdir; 
 % dataFilename = "PandasetSensorData.zip";
 % url = "https://ssd.mathworks.com/supportfiles/driving/data/" + dataFilename;
 % filePath = fullfile(dataFolder,dataFilename);
