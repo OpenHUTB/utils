@@ -1,0 +1,46 @@
+#!/bin/sh -e
+#
+# rc.local
+#
+# This script is executed at the end of each multiuser runlevel.
+# Make sure that the script will "exit 0" on success or any other
+# value on error.
+#
+# In order to enable or disable this script just change the execution
+# bits.
+#
+# By default this script does nothing.
+# echo "看到这行字，说明添加自启动脚本成功。" > /usr/local/test.log
+
+# 0.使/etc/rc.local发挥作用
+# vi /etc/systemd/system/rc-local.service
+# [Install]   
+# WantedBy=multi-user.target   
+# Alias=rc-local.service
+
+# /etc/rc.local
+# 1. 为脚本添加可执行权限
+# chmod +x /etc/rc.local
+# 2. 启动服务
+# systemctl enable rc-local
+# 3. 启动服务
+# systemctl start rc-local.service
+# 4. 检查是否启动成功
+# systemctl status rc-local.service
+# 5. 重启并检查服务运行状态
+# reboot
+# systemctl status rc-local.service
+
+# 开机启动nginx
+echo "jjj" | sudo -S /data2/whd/software/nginx-1.7.9/sbin/nginx
+
+# 开机启动限制CPU的后台进程
+nohup /data2/whd/workspace/AI/tools/shell/cpulimit_daemon.sh >/dev/null 2>/dev/null &
+
+# /usr/bin/vmware start "/home/d/vm/win10_dong\win10_dong.vmx" nogui
+# /usr/bin/vmrun start "/home/d/vm/win10_dong/win10_dong.vmx"
+
+
+exit 0
+
+# 参考: https://zhuanlan.zhihu.com/p/63507762

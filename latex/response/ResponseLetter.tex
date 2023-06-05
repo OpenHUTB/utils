@@ -1,0 +1,747 @@
+
+
+\documentclass[12pt,journal,onecolumn]{IEEEtran}
+
+
+% correct bad hyphenation here
+\hyphenation{op-tical net-works semi-conduc-tor}
+\usepackage{graphicx}
+\usepackage[table,xcdraw]{xcolor}
+\usepackage[TABBOTCAP]{subfigure}
+\usepackage{bm}
+\usepackage{upgreek} 
+\usepackage{amsmath}
+\usepackage{breqn}
+\usepackage{color}
+\usepackage{cite}
+\usepackage[none]{hyphenat}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{caption2}
+\usepackage{setspace}
+
+\usepackage{tikz}
+\newcommand*{\circled}[1]{\lower.7ex\hbox{\tikz\draw (0pt, 0pt)%
+		circle (.4em) node {\makebox[1em][c]{\small #1}};}}
+
+
+\linespread{1.5}
+
+\begin{document}
+
+\begin{center}
+	\textbf{\LARGE Response to Comments} 
+\end{center}
+\vspace{8pt} 
+
+\noindent TOMM-Manuscript: TOMM-2021-0302 \\
+
+\noindent Title: JDAN: Joint Detection and Association Network for Real-Time Online Multi-Object Tracking \\
+
+\noindent Dear Editor and Reviewers:
+
+\textcolor{blue}{
+We want to thank you and the review team for the detailed comments on our submission, and for the opportunity to revise and resubmit the paper to Transactions on Multimedia Computing Communications and Applications.  
+Those comments are all valuable and very helpful for revising and improving our paper, as well as the important guiding significance to our researches. 
+We have studied these comments carefully and have made correction to meet with your approval. 
+The responds to the reviewer's comments are labeled in blue, 
+and the main corrections in the paper are marked in red to facilitate your reading.
+}
+
+\vspace{8pt} 
+
+\newpage
+
+
+
+
+
+\textbf{To Reviewer \#1:}
+
+\textcolor{blue}{Thanks for the comments for our paper, we have revised the manuscript according to your recommendations as follows:}
+
+\textbf{Comment (1).} The disorder of the Figures affects the paper reading.
+
+\textbf{Response:} \textcolor{blue}{Thank you for your comment.
+%Maybe we did not explain it clearly in the previous manuscript. 
+In the revised vision, we have reorganized the sections, figures, and tables.
+All the citations as well as the corresponding figures and tables are located in the same or neighboring page.
+} \\ 
+%In the new manuscript, we have adjusted the order of the figures and updated the explanation of motivation in this paper,  which are more reasonable and comprehensible. 
+%In the Fig.1, we show our aims to implement the end-to-end multi-object tracking model by combining the object detection task with the association task. 
+%In the modified Fig.1, we show the traditional two-stage MOT pipeline, one-stage MOT pipeline with existing problems and our solutions to it.
+%In the Fig.2, we present the architecture of our proposed JDAN.
+%In the Fig.3, we display the detailed design of loss function.
+%In the Fig.4, we show the deployment of our proposed model in online MOT task.
+%In addition, the corresponding figure and the reference are within two page.
+
+
+%\begin{figure}[H]
+%	\centering 
+%	\includegraphics[width=0.9\textwidth]{imgs/inconsistency.png}
+%\end{figure}
+%
+%\begin{figure}[H]
+%	\centering 
+%	\includegraphics[width=0.9\textwidth]{imgs/framework.png}
+%\end{figure}
+%\vspace{8pt}
+
+\textbf{(2).} In contribution one, it claims the proposed structure is an end-to-end method, but the paper seems to write the method into 2 stages?
+
+\textbf{Response:} \textcolor{blue}{Thank you for your valuable comment. 
+The old version elaborates unclearly in explaining the \emph{end-to-end} method.
+In the revised manuscript, we have rewritten our description about the \emph{end-to-end} training to make it more understandable as follows: \\
+First, we have compared two-stage, one-stage and our approaches to introduce the motivation of \emph{end-to-end} training, which aims to alleviate the error propagation problem.
+We have emphasized it in our introduction as follows:
+%The main purpose of our work is to joint the two task,
+%so it is necessary to introduce the specified design in object detection and data association.
+%In the revised manuscript, we have updated our description about the \emph{end-to-end} training method, and make it more understandable.
+%Finally, we emphasize it in our introduction as follows: 
+}
+
+\textcolor{red}{
+``Different from two-stage approaches, one-stage methods [42, 44] try to integrate both \emph{online} detection and association into one framework, and thus could share model parameters for target \textcolor{red}{representations (see Fig. 1 (b)) to} decrease the tracking cost [22, 44]. 
+However, common one-stage methods adopt an independent processing pattern for detection and association,
+including training an effective detection model and then employing complex association tricks for generating trajectories. 
+The association results greatly depend on the detection accuracy.
+In other words, detection and association are independent of each other during the training process, 
+and could not achieve an \emph{end-to-end} training.
+As a result, object detection errors will be propagated to the association stage, thereby reducing the accuracy of MOT. "
+}
+
+\textcolor{red}{
+``Motivated by this, this paper proposes an \emph{end-to-end} training framework named ``Joint Detection and Association Network" (``JDAN" for short) to alleviate this problem. 
+Our framework mainly consists of three parts: \emph{detection submodule}, \emph{joint submodule}, and \emph{association submodule}. 
+Concretely, we first use a pre-trained two-stream detection network to extract initial object candidates and their representations. 
+Then, the \emph{joint submodule} is employed to merge all possible representation concatenations between two frames to generate a \emph{confusion tensor}. 
+Finally, the \emph{association submodule} converts the tensor to an \emph{association matrix}, which indicates the matching relation among multiple targets from the two frames. 
+To jointly train the previous submodules, one challenge lies in the inconsistent object problem,
+where the \emph{detection submodule} may generate inconsistent objects in quality, location and size as compared to the tracking ground truth for MOT task. 
+To bridge this gap, our approach abandons the existing tracking ground truth,
+and leverages the traditional association method [44] to produce pseudo labels for detection results (see Fig. 1 (c)), 
+which are then fed to the \emph{association submodule} to generate tracking results. 
+Consequently, our model could jointly train all the submodules in an \emph{end-to-end} way to generate a robust one-stage model. 
+Moreover, as pseudo labels are only used in the training stage instead of testing, they have no effect in prediction speed during the inference stage."
+}
+
+\textcolor{red}{
+``Different from previous one-stage methods, our approach could jointly train both \emph{detection} and \emph{association submodules} in an \emph{end-to-end} fashion,
+which alleviates the error propagation problem. 
+% fairmot, 1, We evalute our approach
+We evaluate the proposed method on MOT15 [21] and MOT17 [31] datasets, 
+and find the proposed method outperforms multiple \emph{online} trackers."
+}
+
+\textcolor{red}{
+``We propose an \emph{end-to-end} architecture to jointly process both object detection and association to alleviate the error propagation problem. As far as our knowledge, our work is the first attempt to implement an \emph{end-to-end} training for MOT task."
+}
+
+%\begin{figure}[H]
+%	\centering 
+%	\includegraphics[width=0.9\textwidth]{imgs/inconsistency.png}
+%\end{figure}
+
+\textcolor{blue}{
+Second, in the implementation, we have elaborated the process of \emph{end-to-end} training and emphasized it in Section 3.5.1 as follows:
+}
+
+\textcolor{red}{
+``JDAN contains two trainable submodules: \emph{detection submodule} $S_D$ and \emph{association submodule} $S_A$. Our approach adopts an iterative training process to train the model which consists of two steps:
+First, we adopt a pretrained object detection model on several detection datasets [10, 11, 47, 52, 55] and fine-tune its parameters according to the detection loss $\mathcal{L}_{d}$ on the basis of ground truth; 
+Second, given the pseudo labels on detected targets by utilizing Kalman Filter [44], 
+we update both \emph{detection} and \emph{association submodules} according to $\mathcal{L}_{s}$ in Equation 9.
+We iteratively repeat the above two steps until the loss $\mathcal{L}_{s}$ is converged.
+Compared to the previous approaches, errors could be propagated back to update both \emph{detection} and \emph{association submodules},
+and thus our approach could achieve an \emph{end-to-end} training to alleviate the error propagation problem."
+}
+
+\vspace{8pt}
+
+\textbf{(3).} The results are calculated from the current frame and historical frames. 
+Thus, how does it influences the speed of the detection process? 
+Can analyze the FPS or complexion between this method and other comparison methods?
+
+\textbf{Response:} \textcolor{blue}{Thanks for your professional suggestions.
+In the revised manuscript, we have analyzed the \emph{online} tracking speed in Section 3.5.2 as follows:
+%In the revised manuscript, we have fixed the online tracking description in Section 4.4.1. 
+%In the online tracking process, a video frame is transferred through the \emph{detection submodule} only once, 
+%and we store the current frame features for future use.
+%Besides, we compare our proposed method with other online MOT methods in Table 5.
+%These two-stage methods are quite time-consuming since both detection and representation extraction require many computing resources when the model parameters are not shared, 
+%and these object representations are extracted twice which causes repeated calculation in MOT. 
+%Since we use a suitable backbone network and extract object representations only once in online tracking, its speed and complexion are acceptable and we achieve a real-time MOT tracking.
+%Finally, we emphasize it in Section 3.5.2 and our experiments as follows: \\
+}
+
+\textcolor{red}{
+``Fig. 4 demonstrates the \emph{online} tracking process by JDAN.
+Given an input frame $F_t$, the \emph{detection submodule} predicts target representations $R_t$ for all the targets in $F_t$.
+Then, the representation $R_t$ and historical representations $R_{t-n:t-1}$ are passed into two components: \emph{joint \& association submodules} to generate the corresponding \emph{association matrix} $M_{t-n:t-1,t}$, and \emph{trajectory manager} to updates accumulator by using Kuhn-Munkres method~[32]. 
+Concretely, tracks in \emph{trajectory manager} store tracking information for the historical frames $F_{t-n:t-1}$, 
+and every element in accumulator is the sum of similarities of a track to the detected objects in the current frame. 
+Here, a track corresponds to a target identity, and is a recorder of key-value pair, where key is the index of a historical frame, and value is the corresponding target representation in that frame.
+After receiving a new target representation $R_t$ in $F_t$, \emph{trajectory manager} would reserve the representation $R_t$ and output all the representations $R_{t-n:t-1}$, $R_t$ into the \emph{joint \& association submodules} to generate the \emph{association matrix} $M_{t-n:t-1,t}$ between each historical frame $F_{t-n}$ and the current frame $F_t$.
+After that, the accumulator in \emph{trajectory manager} are updated, and the tracking results $T_t$ in $F_t$ are generated. Some special cases have been considered in our method.
+For instance, a historical track may has no matching target in the current frame, which indicates a target disappears.
+In such case, we add a column in the acculumator to make each track corresponding to a sole column.
+% 
+The cost of \emph{online} tracking is composed of two parts: 
+the \emph{detection submodule} to generate representation $R_t$ for the current frame, and the \emph{joint \& association submodules} to output tracking results $T_t$.
+To ensure tracking speed, we adopt lightweight detection and association networks, and all the historical information including $R_{t-n:t-1}$ are stored in \emph{trajectory manager} without recalculation.
+Therefore, our \emph{online} tracking could achieve a fast speed." 
+} 
+
+%\begin{figure}[H]
+%	\centering 
+%	\includegraphics[width=0.9\textwidth]{imgs/online_tracking.png}
+%\end{figure}
+%\vspace{8pt}
+
+\textcolor{blue}{
+Moreover, in the experiments, we have compared and analyzed our approach as compared to the two-stage and one-stage approaches in speed as follows:
+}
+
+\textcolor{red}{
+``Table 5 lists the comparision results.
+Compared with two-stage approaches, JDAN slightly improves the accuracy measured by all the metrics on both MOT15 and MOT17 datsets.
+What's more, JDAN achieves a near real-time tracking speed, which is much faster than two-stage methods with 10 FPS at least.
+This high efficiency stems from the shared representation features and \emph{end-to-end} tracking paradigm.
+Compared to the one-stage JDE, JDAN performs better on all the metrics, with IDF1 increasing from 56.9 to 57.8 on MOT15, and from 55.8 to 59.2 on MOT17.
+This improvement proves that the \emph{end-to-end} training in JDAN could well alleviate the error propagation problem for the \emph{online} tracking method.
+What's more, JDAN runs faster for \emph{online} tracking, because JDAN directly adopts an \emph{association matrix} to generate tracking results, while JDE uses a larger backbone and many complex association tricks." \\
+}
+
+
+
+%\begin{figure}[H]
+%	\centering 
+%	\includegraphics[width=0.9\textwidth]{imgs/result_MOT_one_two_stage.png}
+%\end{figure}
+\vspace{8pt}
+
+
+\vspace{8pt}
+
+\newpage
+
+
+
+
+
+\textbf{To Reviewer \#2:}
+
+\textcolor{blue}{Thanks for the comments for our paper, we have revised the manuscript according to your recommendations as follows:}
+
+\textbf{(1).}  Page 2, line 30-40 describes two problems of existed one-stage tracker. 
+The first one is ``modality difference between detection and association task", is there any reference or experimental results to support this claim to make it sound?  
+The second one is ``detection results of MOT have no corresponding detection model implementation", which confuses me. 
+Does it means that the category of detection model is from another dataset, not on MOT?
+
+\textbf{Response:}  \textcolor{blue}{Thank you for your kind suggestion.
+First, our target is to joint object detection and association into a single framework.
+However, the task of object detection only involves the processing of spatial information in static frame, and data association concerns different video frames over time series. 
+As described in ``Integrated Triplet Loss" [1], there exists the modality difference to prevent the end-to-end training. 
+In the revised manuscript, we have updated this description about our motivation,
+%The \emph{detection submodule} generates inconsistent objects in quality, location and size as compared to the association ground truth for MOT. 
+and emphasized it as follows:} \\
+\textcolor{red}{
+``However, common one-stage methods adopt an independent processing pattern for detection and association,
+including training an effective detection model and employing complex association tricks for generating trajectories. 
+The association results greatly depend on the detection accuracies.
+In other words, detection and association are independent of each other during the training process, 
+and couldn't achieve an \emph{end-to-end} model training.
+As a result, object detection errors will be propagated to the association stage, thereby reducing the accuracy of the entire MOT. "
+} \\
+\textcolor{red}{
+``To jointly train the previous submodules, one challenge lies in the inconsistent object problem.
+The \emph{detection submodule} generates inconsistent objects in quality, location and size as compared to the tracking ground truth for MOT task. To bridge this gap, our approach abandons the existing tracking ground truth,
+and leverages the traditional association method [45] to produce pseudo labels for detection results (see Fig. 1 (c)), 
+which are then fed to the \emph{association submodule} to generate tracking results. 
+Consequently, our model could jointly train all the submodules in an \emph{end-to-end} way to generate a robust one-stage model. "
+\\
+}
+%the task of object detection only involves the processing of spatial information in static frame, while the task of data association concerns different video frame over time series. 
+%For example, in the introduction of "Integrated Triplet Loss" (Temporal knowledge propagation for image-to-video person re-identification), they demonstrate the modility difference between image feature and video feature.
+%
+\textcolor{blue}{
+Second, we have deleted it in the revised version. Originally, we want to emphasize that the bounding box provided by the MOT ground truth is usually inconsistent with the detection results obtained by \emph{detection submodule}, which we call it the inconsistent object problem.
+We express it in Section 1 and Section 3.3 as follows: \\
+%Second, the \emph{detection submodule} utilized in one-stage MOT is private detector, which is trained on both other detection datasets and MOT benchmark datasets. 
+%There are only detection results provided by MOT benchmark dataset, but the specific detector implementations (DPM [2], SDP [3] and FRCNN [4]) are lack.
+%%There are only detection results provided by MOT benchmark dataset. 
+%That is to say, the bounding boxe label in existing MOT benchmark datasets and the results of existing detection model are inconsistent, 
+%and the corresponding detector implementation in MOT benchmark data that is necessary in \emph{end-to-end} MOT, which described in our introduction and Section 3.3 as follows: \\
+}
+\textcolor{red}{
+``To jointly train the previous submodules, one challenge lies in the inconsistent object problem.
+The \emph{detection submodule} generates inconsistent multiple objects in quality, location and size as compared to the tracking ground truth for MOT task. 
+To bridge this gap, our approach abandons the existing tracking ground truth,
+and leverages the traditional association method to produce pseudo-labels for detection results (see Fig.1 (c)). 
+These detection results would be fed to the \emph{association submodule} to generate tracking results. 
+Consequently, our model could jointly train all the submodules in an \emph{end-to-end} way to generate a robust one-stage model. "
+} \\
+\textcolor{red}{
+``In \emph{joint submodule}, all the object representations $R_t$, $R_{t-n}$ come from the \emph{detection submodule}, and may have data inconsistency with the tracking ground truth in MOT benchmark datasets.
+Therefore, it is difficult to implement an \emph{end-to-end} training. "
+}
+\\
+\textcolor{blue}{
+[1] Gu, X. , et al. ``Temporal Knowledge Propagation for Image-to-Video Person Re-Identification." International Conference on Computer Vision.
+} \\
+\textcolor{blue}{[2] Felzenszwalb, et al. ``Object Detection with Discriminatively Trained Part-Based Models. " IEEE Transactions on Pattern Analysis \& Machine Intelligence 32.9(2010):1627-1645.} \\
+\textcolor{blue}{[3] Fan, Y. , W. Choi , and Y. Lin . ``Exploit All the Layers: Fast and Accurate CNN Object Detector with Scale Dependent Pooling and Cascaded Rejection Classifiers." 2016 IEEE Conference on Computer Vision and Pattern Recognition (CVPR) IEEE, 2016.
+} \\
+\textcolor{blue}{[4] Ren, Shaoqing , et al. ``Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks." IEEE Transactions on Pattern Analysis \& Machine Intelligence 39.6(2017):1137-1149.
+}
+\vspace{8pt} 
+\\
+\\
+
+
+\textbf{(2).} Page 3, line 32, ``first train our detection submodule in training stage 1" on which dataset? 
+line 33 ``and utilize traditional association method to produce trajectories", please clarify what ``traditional method" is reffering to. 
+line 45, ``We design an end-to-end architecture". 
+The meaning of ``end-to-end" is different from a conventional expression which refers a joint training work. 
+Since this work is trained in two separate phases for two tasks, this brings inaccuracy.
+
+\textbf{Response:} \textcolor{blue}{Thank you very much for your helpful comment. 
+Maybe we did not explain it clearly in the previous manuscript. 
+In the new manuscript, we have revised the introduction and related description to explain the proposed model. 
+First, we have trained our \emph{detection submodule} on CityPersons, ETH, CUHK, Caltech and PRW datasets, and the detailed description is presented in Section 4.1 as follows: \\
+\textcolor{red}{
+``Our datasets consist of two components: detection datasets and MOT datasets.
+We first adopt several detection datasets to train our \emph{detection submodule}. In particular, CityPersons [52] and ETH [11] datasets merely supply bounding box information, 
+and we use them to train the \emph{positioning head}. 
+\textcolor{red}{Moreover, }CUHK [47], Caltech [10] and PRW [55] could supply both pedestrian bounding box and identity information,
+and thus we can train the \emph{positioning} and \emph{representation heads} jointly."
+} \\
+Second, our approach utilizes a traditional association method named Kalman Filter to predict the locations of tracklets in the current frame, which we have elaborated in the revised introduction and algorithm as follows: \\
+\textcolor{red}{
+``To bridge this gap, our approach abandons the existing tracking ground truth,
+and leverages the traditional association method [44] to produce pseudo labels for detection results (see Fig. 1 (c)), 
+which are then fed to the \emph{association submodule} to generate tracking results.  "
+} \\
+\textcolor{red}{
+``To solve this problem, we discard the tracking ground truth, and adopt a simple yet effective traditional association method called Kalman Filter [46] to predict the locations of tracklets, resulting in tracking pseudo-labels for the object representations $R_t$, $R_{t-n}$."
+} \\
+Third, we have designed an \emph{end-to-end} architecture to process object detection and online MOT jointly. 
+Concretely, we iteratively repeat two steps until the loss is converged.
+Compared to previous approaches, errors could be propagated back to update both \emph{detection} and \emph{association submodules},
+and thus our approach could achieve an \emph{end-to-end} training to alleviate the error propagation problem.
+We have emphasized it in the introduction and Section 3.5.1 as follows: \\
+\textcolor{red}{
+``Our approach adopts an iterative training process to train the model which consists of two steps:
+First, we adopt a pretrained object detection model on several detection datasets [11, 12, 48, 53, 56] and fine-tune its parameters according to the detection loss $\mathcal{L}_{d}$ on the basis of ground truth; 
+Second, given the pseudo labels on detected targets by utilizing Kalman Filter [45], 
+we update both \emph{detection} and \emph{association submodules} according to $\mathcal{L}_{s}$ in Equation 9.
+We iteratively repeat the above two steps until the loss $\mathcal{L}_{s}$ is converged.
+Compared to previous approaches, errors could be propagated back to update both detection and association submodules,
+and thus our approach could achieve an \emph{end-to-end} training to alleviate the error propagation problem." \\
+``To bridge this gap, our approach abandons the existing tracking ground truth,
+and leverages the traditional association method to produce pseudo-labels for detection results (see Fig.1 (c)). 
+These detection results would be fed to the \emph{association submodule} to generate tracking results. 
+Consequently, our model could jointly train all the submodules in an \emph{end-to-end} way to generate a robust one-stage model. " \\
+``Different from previous one-stage methods, our approach could jointly train both \emph{detection} and \emph{association submodules} in an \emph{end-to-end} fashion,
+which alleviates the error propagation problem. "
+}
+}
+\\ \\
+
+\vspace{8pt}
+
+
+\textbf{(3).} Page 5, line 40-41 ``These modifications are likewise beneficial to relieve the alignment problem". 
+Are there any experimental results to support that the modification on DLA brings improvement over the original DLA?
+
+\textbf{Response:} \textcolor{blue}{Thank you very much for your valuable comment. 
+In the revised vision, we have explained the differences between the raw DLA and the variant of DLA.
+The previous study [53] have proved that the variant of DLA is beneficial to decrease the ID switch.
+Therefore, we do not repeat this experiment and emphasize it in Section 3.2.1 as follows:
+} \\
+%In the revised manuscript, we have updated our introduction and cited related papers, which are more reasonable and comprehensible. 
+%In the experiment of "Objects as points" and its Figure 6, these modifications are proved to be effective, and the usage in "Tracking Objects as Points" demonstrates the effectiveness in MOT. 
+%Finally, we emphasize it in our algorithm as follows: \\
+\textcolor{red}{
+``Compared with the raw DLA [53], the variant of DLA has additional bypasses between the low and high layer representations,
+and thus has stronger ability to handle various complex environments.
+It is demonstrated that the variant of DLA is beneficial to decrease the ID switch for the one-stage approaches because the encoder-decoder network could deal with objects of varied sizes [56, 60].
+Moreover, all the convolutional blocks in the upsampling process are displaced by the deformable convolutional module which can adaptively accommodate to the change of target size [9, 59]."
+}
+\\ \\
+\vspace{8pt}
+
+
+\textbf{(4).} Page 8, line 20. ``First, we use the pre-trained detection submodule and a traditional association", please specify ``traditional association"
+
+\textbf{Response:} \textcolor{blue}{Thank you for your kind suggestion.
+Maybe we did not explain it clearly in the previous manuscript. 
+Our approach utilizes a traditional association method named Kalman Filter to predict the locations of tracklets in the current frame. 
+We have emphasized it in Section 1 as follows: \\
+}
+\textcolor{red}{
+``To bridge this gap, our approach abandons the existing tracking ground truth, and leverages the traditional association method [44] to produce pseudo labels for detection results (see Fig.1 (c)). 
+These detection results would be fed to the \emph{association submodule} to generate tracking results. 
+Consequently, our model could jointly train all the submodules in an \emph{end-to-end} way to generate a robust one-stage model. " \\
+``In \emph{joint submodule}, all the object representations $R_t$, $R_{t-n}$ come from the \emph{detection submodule}, and may have data inconsistency with the tracking ground truth on MOT benchmark datasets.
+Therefore, it is difficult to implement an \emph{end-to-end} training. 
+To solve this problem, we discard the tracking ground truth, and adopt a simple yet effective traditional association method that utilizes Kalman Filter [44] to predict the locations of tracklets, resulting in tracking pseudo labels for the object representations $R_t$, $R_{t-n}$."
+}
+\vspace{8pt} \\ \\
+
+
+
+
+\textbf{(5) (6).} Page 15, line 4-23 Table 4, the author only compares with the two-stage trackers, why not presents the other single-stage models in this Table?
+
+Page 16, Table 6, The author mentioned several single-stage models TrackRCNN, JDE, FairMot (mentioned in Page 17, line 13-14), but only compare one JDE, why not involves the rest. 
+By the way, it's better to combine Table 4 and Table 6.
+
+%\textcolor{red}{
+%``Meanwhile, we compared JDAN with the one-stage approach JDE [56], which is a representive MOT method.
+%FairMOT [54] is not list and compared with our JDAN because its association process adopts feature and IoU distances in association with complex and hand-designed tricks to boost MOT performance.
+%Its engineering implementation is complex and requires to manually tune many parameters to adapt to different datasets.
+%Our JDAN is simple and abandon manual parameter setting in association by using \emph{association matrix}."
+%}
+
+\textbf{Response:} \textcolor{blue}{Thank you for your kind suggestion. 
+Since the comment 5 and 6 are similar, we reply them together.
+In Section 4.4, we have adjusted the experiment structure and merged the two tables into Table 5.
+Since there are few one-stage methods to solve the online MOT task,
+we only present a representative one-stage MOT method and abandon the other two because of the following reasons: 
+} 
+\textcolor{blue}{
+%In the revised manuscript, we have merged the two tables into Table 5. 
+The TrackRCNN requires additional image segmentation ground truth, and its experiments are not conducted on MOT datasets.
+% and presents tracking performance with a different method in the image segmentation problem. 
+Besides, FairMOT adopts many complex and hand-designed association tricks to boost the performance: 
+(1) linking the boxes to the existing tracklets according to their distances measured by IoU. 
+%(2) predicting the locations of the tracklets in the current frame. 
+(2) setting the corresponding cost to infinity which effectively prevents from linking the detections with large motion. 
+(3) updating the appearance features of the trackers in each time step to handle appearance variations and so on.
+It is more like an engineering implementation.
+Therefore, we do not compare with them.
+%Therefore, in the study, we conduct a series of ablation studies, and compare the proposed method with the JDE to prove the validity of our proposed \emph{end-to-end} detection-tracking methods, which is described detailedly in Section 4.4.2. 
+%The traditional association can be replaced with higher performance module in the future.
+%And we emphasize it in our experiments as follows: \\
+We have emphasized it in Section 4.4 as follows:\\
+}
+\textcolor{red}{
+``In this part, we evaluate and analyze the proposed method as compared with existing MOT methods including one-stage and two-stage approaches. Concretely, to prove the validity of the proposed \emph{end-to-end} detection-tracking method, we compare several two-stage approaches on MOT15 and MOT17 including MDP\_SubCNN [46], CDA\_DDAL [2], EAMTT [40], AP\_HWDPL [5], RAR15 [12].
+Meanwhile, we compare JDAN with the one-stage approach JDE [56], which is a representive MOT method.
+TrackRCNN [42] is not listed and compared because it requires additional image segmentation ground truth, which is not supported on the MOT datasets.
+% and presents tracking performance with a different method in the image segmentation problem. 
+Besides, FairMOT [54] adopts both visual and IoU distance features with complex and hand-designed tricks in its association process to boost the MOT performance.
+Its engineering implementation requires to manually tune many parameters to adapt to different datasets.
+While our JDAN is simple and abandons manual parameter settings in association by using an \emph{association matrix}."
+} \\
+\textcolor{red}{
+``Table 5 lists the comparision results.
+Compared with the two-stage approaches, JDAN slightly improves the accuracy measured by all the metrics on both MOT15 and MOT17 datsets.
+What's more, JDAN achieves a near real-time tracking speed, which is much faster than the two-stage method with 10 FPS at least.
+This high efficiency stems from the shared representation features and \emph{end-to-end} tracking paradigm.
+Compared to the one-stage JDE, JDAN performs better on all the metrics, with IDF1 increasing from 56.9 to 57.8 on MOT15, and from 55.8 to 59.2 on MOT17.
+This improvement proves that the \emph{end-to-end} training in JDAN could well alleviate the error propagation problem for the \emph{online} tracking method.
+What's more, JDAN runs faster for \emph{online} tracking, because JDAN directly adopts an \emph{association matrix} to generate tracking results, while JDE uses a larger backbone and many complex association tricks."
+}
+%\begin{figure}[H]
+%	\centering 
+%	\includegraphics[width=0.9\textwidth]{imgs/result_MOT_one_two_stage.png}
+%\end{figure}
+\vspace{8pt}
+
+%\begin{figure}[H]
+%	\centering 
+%	\includegraphics[width=0.9\textwidth]{imgs/result_MOT_one_two_stage.png}
+%\end{figure}
+
+
+\textbf{(7).} Edit problem: page 15 line 50, please specify ``Table ??"
+
+\textbf{Response:} \textcolor{blue}{Thank you for your kind suggestion. 
+In the revised manuscript, we have fixed it and emphasized it in our experiments as follows: \\
+}
+\textcolor{red}{
+``We try three $N_m$ values (100, 150, 200) under different representation dimensions, 
+and the experimental results are list in Table 4."
+} 
+
+
+
+%\textbf{[1]} Gu, X. , et al. "Temporal Knowledge Propagation for Image-to-Video Person Re-Identification." International Conference on Computer Vision.
+\vspace{8pt}
+
+
+\vspace{8pt}
+
+\newpage
+
+
+
+
+\textbf{To Reviewer \#3:}
+
+\textcolor{blue}{Thanks for the comments for our paper, we have revised the manuscript according to your recommendations as follows:}
+
+\textbf{(1).} FairMOT [58] and JDE [60] are the recently proposed one-stage MOT approaches, which are very related to the proposed JDAN.
+Compare to these approaches, what are the main differences of JDAN? 
+Also, how or why can those differences help JDAN better address the challenges in MOT? 
+What does “true end-to-end” mean specifically? These must be further clarified in the paper, such that the contributions clearer.
+
+\textbf{Response:} \textcolor{blue}{Thank you for your professional suggestion. 
+First, JDE and FairMOT are both one-stage methods for MOT task.
+Although these two methods integrate both detection and association into one framework, they do not adopt deep networks to make target association.
+Actually, they adopt hand-designed and complex association methods with abundant manual settings to boost the performance.
+Differently, our approach adopts a differential deep network to generate target association without any manual setting for association to adapt to different datasets.
+Moreover, our approach could implement an \emph{end-to-end} training to alleviate the error propagation problem, and thus it could improve the performance to some extent.
+We hope our work could attract more researches to focus on one-stage MOT method by using \emph{end-to-end} training.
+We have elaborated the above content in the revised version as follows: \\
+}
+%First, FairMOT and JDE tries to add detection task to MOT. 
+%However, FairMOT uses hand-designed and complex association methods to link the boxes with the existing tracklets according to their distances measured by Re-ID features and IoU's. 
+%They also use state estimation method to predict the locations of the tracklets in the current frame. 
+%We replace the online box linking with a differentiable network \emph{association submodule}. 
+%Besides, JDE only implement the extraction of object feature, and have no data association in deep network.
+%% implement an \emph{end-to-end} training method to joint detection and association task, and
+%And we emphasize it in our experiments as follows: \\
+\textcolor{blue}{
+\circled{1}We have elaborated the shortcoming of one-stage approaches in Section 4.4 as follows:
+} \\
+\textcolor{red}{
+``Meanwhile, we compare JDAN with the one-stage approach JDE [56], which is a representive MOT method.
+TrackRCNN [42] is not listed and compared because it requires additional image segmentation ground truth, which is not supported on the MOT datasets. 
+Besides, FairMOT [55] adopts both visual and IoU distance features with complex and hand-designed tricks in its association process to boost the MOT performance.
+Its engineering implementation requires to manually tune many parameters to adapt to different datasets.
+While our JDAN is simple and abandons manual parameter settings in association by using an \emph{association matrix}."	
+} \\
+\textcolor{blue}{
+\circled{2}We have introduced the \emph{end-to-end} training in the introduction and algorithms parts as follows: \\
+%Second, our proposed JDAN processes both object detection and association jointly, and implements a further \emph{end-to-end} MOT training and testing mdethod to alleviate the error propagation problem compared with FairMOT and JDE. 
+%And we emphasize it in our experiments and introduction as follows: \\
+}
+\textcolor{red}{
+``Different from two-stage approaches, the one-stage methods [42, 44] try to integrate both \emph{online} detection and association into one framework, and thus could share model parameters for target \textcolor{red}{representations (see Fig. 1 (b)) to} decrease the tracking cost [22, 44].
+However, common one-stage methods adopt an independent processing pattern for detection and association,
+including training an effective detection model and then employing complex association tricks for generating trajectories. 
+The association results greatly depend on the detection accuracy.
+In other words, detection and association are independent of each other during the training process, 
+and could not achieve an \emph{end-to-end} training.
+As a result, object detection errors will be propagated to the association stage, thereby reducing the accuracy of MOT. " \\
+}
+\textcolor{red}{
+``Our approach adopts an iterative training process to train the model which consists of two steps:
+First, we adopt a pretrained object detection model on several detection datasets [11, 12, 48, 53, 56] and fine-tune its parameters according to the detection loss $\mathcal{L}_{d}$ on the basis of ground truth; 
+Second, given the pseudo labels on detected targets by utilizing Kalman Filter [45] to predict the locations for tracklets, 
+we update both \emph{detection} and \emph{association submodules} according to $\mathcal{L}_{s}$ in Equation 9.
+We iteratively repeat the above two steps until the loss $\mathcal{L}_{s}$ is converged.
+Compared to the previous approaches, errors could be propagated back to update both \emph{detection} and \emph{association submodules},
+and thus our approach could achieve an \emph{end-to-end} training to alleviate the error propagation problem."
+} \\
+%\begin{figure}[H]
+%	\centering 
+%	\includegraphics[width=0.9\textwidth]{imgs/inconsistency.png}
+%\end{figure} 
+\textcolor{blue}{
+\circled{3}We have revised our contributions as follows: \\
+%Third, Our approach adopts an iterative training process to train the model which consists of two steps: detection and association submodule training.
+%We iteratively repeat the above two steps until the loss is converged. 
+%Finally, we emphasize it in Section 3.5.1 as follows:\\
+\textcolor{red}{
+``We propose an \emph{end-to-end} architecture to jointly process both object detection and association to alleviate the error propagation problem. As far as our knowledge, our work is the first attempt to implement an \emph{end-to-end} training for MOT task."
+}
+}
+\\ \\
+\vspace{8pt} 
+
+
+\textbf{(2).} The organization of Section 3 is a bit messy. 
+There may lacks an overview text or figure to wrap up everything. 
+The relations between Figures 2, 3, and 4 are unclear, as well as the correspondence between the subsections and the figures. 
+Besides, it is recommended to highlight the novel parts of JDAN in Section 3 while leave more existing implementations into Section 4.2.
+
+\textbf{Response:} \textcolor{blue}{Thank you for your valuable suggestion. 
+First, we have reorganized our paper, and the current version is more clearly in logic.
+The paper structure is as follows: 
+} \\
+\textcolor{red}{
+\indent \indent 1. Introduction \\
+\indent \indent 2. Related Work \\
+\indent \indent 3. Our Algorithm \\
+\indent \indent \indent \indent 3.1 Framework \\
+\indent \indent \indent \indent 3.2 Detection Submodule \\
+\indent \indent \indent \indent 3.3 Joint Submodule \\
+\indent \indent \indent \indent 3.4 Association Submodule \\
+\indent \indent \indent \indent 3.5 Training and Testing \\
+\indent \indent 4. Experiments \\
+\indent \indent 5. Conclusion \\
+}
+%In the revised manuscript, we have updated our introduction according to the whole architecture in Section 3, which are more reasonable and comprehensible. 
+%In the modified Fig.1, we explain the faced problem of data inconsistency and list our solutions to it.
+%In the Fig.2, we present the architecture of our proposed JDAN.
+%In the Fig.3, we display the detailed design of loss function to train the whole model, and adjust the corresponding figure on the appropriate page of the paper.
+%Besides, we have added framework description and leave some implementation details into Section 4.2,
+%which are more reasonable and comprehensible. 
+%And we highlight the novel parts in our algorithm as follows: \\
+\textcolor{blue}{
+Second, we have added an overview part in Section 3.1 as follows: \\
+}
+\textcolor{red}{
+``3.1 Framework \\ 
+Fig. 2 demonstrates the framework of our proposed JDAN,
+which mainly consists of three submodules: \emph{detection submodule}, \emph{joint submodule}, and \emph{association submodule}.
+First, two input video frames are disposed of the two-stream \emph{detection submodule} with shared parameters to learn object representations. 
+On this basis, all object representations are then copied along the vertical and horizontal directions, respectively, to form a \emph{confusion tensor} in \emph{joint submodule}. 
+Finally, the generated tensor is converted into an \emph{association matrix} via an \emph{association predictor} in \emph{association submodule}. 
+As a result, the matching relationship between multiple targets from the two frames is predicted according to the \emph{association matrix}.
+Different from previous approaches, our algorithm could solve the data inconsistent problem between detection and tracking tasks, and implement an \emph{end-to-end} training pattern to alleviate the error propagation problem. 
+"
+} \\
+\textcolor{red}{
+``In this section, we first describe the framework of our proposed JDAN.
+Then, we introduce the details including our \emph{detection submodule}, \emph{joint submodule} and \emph{association submodule}, respectively.
+Finally, we present the training and testing strategies to formulate our \emph{end-to-end online} MOT."
+} \\
+\textcolor{blue}{
+Third, we have revised the figures and their captions.
+Figure 2 is the framework, Figure 3 is the technical route of the \emph{association submodule}, and Figure 4 describes the \emph{online} tracking process in the testing stage.
+We ensure all the figures and their citation appear in the same or neighboring page.
+} \\
+%\begin{figure}[H]
+%	\centering 
+%	\includegraphics[width=0.9\textwidth]{imgs/framework.png}
+%\end{figure}
+\textcolor{blue}{
+Fourthly, we have emphasized the novel parts in the contribution as well as in the algorithm.
+\emph{Joint} and \emph{association submodules} are our novel parts.
+} \\
+\textcolor{red}{
+``Our approach employs pseudo labels to solve the object inconsistent problem, and we propose a \emph{joint submodule} followed by association prediction to produce precise tracking results based on these pseudo samples."
+} \\
+\textcolor{red}{
+``The \emph{joint submodule} connects \emph{detection} and \emph{association submodules}, and aims to generate a \emph{confusion tensor} for paired frames.
+Concretely, given two representations $R_t \in {R}^{128 \times N_m}$ and $R_{t-n} \in {R}^{128 \times N_m}$ (the position of placeholder object is filled with zeros), where $N_m$ is the max number of targets in a frame, our approach first copies $R_t$ with $N_m$ times along the vertical direction to construct a tensor $M_t \in {R}^{128 \times N_m \times N_m}$, as well as copies $R_{t-n}$ $N_m$ times along the horizontal direction to generate a tensor $M_{t-n} \in {R}^{128 \times N_m \times N_m}$. Then, both $M_t$ and $M_{t-n}$ are merged along the channel direction to output a \emph{confusion tensor} $M_{t-n,t} \in {R}^{(128 + 128) \times N_m \times N_m}$, which contains all the representation pairs of any two objects from the two frames.
+Therefore, it offers all the object pairs for the next \emph{association submodule} to generate an \emph{association matrix} for MOT."
+} \\
+\textcolor{blue}{
+Finally, we have removed some implements such as data augumentation into Section 4.2.
+}\\
+\textcolor{red}{
+``In order to improve the accuracy, we exploit a series of data augmentation methods.
+First, we increase the frame size by using a random sampling rate in the range of 1.0-1.25, 
+and fill the pixels in the expanded image with the average pixel value in MOT training set. 
+\textcolor{red}{Second,} we clip the video frame randomly in the range of 0.75-1.0,
+and each pixel value in an image is multiplied by a value in the range of 0.75-1.25. 
+The output frame is transformed to the $HSV$ space, 
+and the saturation component is multiplied by a value in the range of 0.75-1.25. 
+\textcolor{red}{Then,} the image is transformed back to the $RGB$ space and multiplied by a random factor sample [27]. 
+Besides, we note that the historical frame $F_{t-n}$ and current frame $F_t$ are not necessarily consecutive in the video sequence,
+and thus set them to be separated by $n$ frames, where $n \in [0, N_a-1] $. 
+"
+} \\
+
+
+\vspace{8pt}
+\vspace{8pt} 
+
+
+\textbf{(3).} In the experiments, there should be some short descriptions about the existing approaches and the reasons why they are chosen or not chosen. 
+In particular, why is FairMOT [58] not compared? 
+And, the authors should explain more on the inferior performance of JDAN under some metrics in Table 4 and 6.
+
+\textbf{Response:} \textcolor{blue}{Thank you for your valuable suggestion. 
+In the revised manuscript, we have updated the descriptions about the existing approaches and the reasons why they are chosen or not.
+We use a traditional association method to generate pseudo labels and train our \emph{association submodule} with an \emph{end-to-end} way.
+% the tracking accuracy will naturally be lower than 
+FairMOT uses many complex and hand-designed association tricks: 
+(1) linking the boxes to the existing tracklets according to their distances measured by IoU. 
+%(2) predicting the locations of the tracklets in the current frame. 
+(2) setting the corresponding cost to infinity which effectively prevents from linking the detections with large motion. 
+(3) updating the appearance features of the trackers in each time step to handle appearance variations and so on.
+It is more like an engineering implementation than a research work. 
+Comparably, our \emph{association submodule} is a differentiable deep network, and our approach could jointly train the whole model in an \emph{end-to-end} fashion,
+which alleviates the error propagation problem. 
+Therefore, in the study, we compare the proposed method with JDE to prove the validity of our proposed \emph{end-to-end} detection-tracking method, which is described detailedly in Section 4.4.2. 
+%And our proposed method can replace the detection submodule with higher performance module in the future.
+Besides, we explain more on the inferior performance of JDAN under some metrics in Section 4.4.1 and Section 4.4.2.
+We have emphasized it in our experiments as follows: \\
+}
+\textcolor{red}{
+``In this part, we evaluate and analyze the proposed method as compared with existing MOT methods including one-stage and two-stage approaches. Concretely, to prove the validity of the proposed \emph{end-to-end} detection-tracking method, we compare several two-stage approaches on MOT15 and MOT17 including MDP\_SubCNN [46], CDA\_DDAL [2], EAMTT [40], AP\_HWDPL [5], RAR15 [12].
+Meanwhile, we compare JDAN with the one-stage approach JDE [56], which is a representive MOT method.
+TrackRCNN [42] is not listed and compared because it needs additional image segmentation ground truth and presents tracking performance with a different method in the image segmentation problem. 
+Besides, FairMOT [54] adopts both visual and IoU distance features with complex and hand-designed tricks in its association process to boost MOT performance.
+Its engineering implementation requires manually tune many parameters to adapt to different datasets.
+While our JDAN is simple and abandons manual parameter settings in association by using an \emph{association matrix}."
+} \\
+\textcolor{red}{
+``Table 5 lists the comparision results.
+Compared with two-stage approaches, JDAN slightly improves the accuracy measured for all the metrics on both MOT15 and MOT17 datsets.
+What's more, JDAN achieves a near real-time tracking speed, which is much faster than two-stage methods with 10 FPS at least.
+This high efficiency stems from the shared representation features and \emph{end-to-end} tracking paradigm.
+Compared to the one-stage JDE, JDAN performs better on all the metrics, with IDF1 increasing from 56.9 to 57.8 on MOT15, and from 55.8 to 59.2 on MOT17.
+This improvement proves that the \emph{end-to-end} training in JDAN could well alleviate the error propagation problem for the \emph{online} tracking method.
+What's more, JDAN runs faster for \emph{online} tracking, because JDAN directly adopts an \emph{association matrix} to generate tracking results, while JDE uses a larger backbone and many complex association tricks."
+}
+%\begin{figure}[H]
+%	\centering 
+%	\includegraphics[width=0.9\textwidth]{imgs/result_MOT_one_two_stage.png}
+%\end{figure}
+\vspace{8pt} 
+
+\textbf{[Other detailed comments].} 
+(1)  To validate the superiority of JDAN, the authors may consider the VidOR benchmark datasets as used in [R1].
+(2)  Table 7 is never used in the paper. If not referred somewhere, the authors should remove it.
+(3)  Please double check Equation 4, which seems missing a negative sign.
+(4)  In the abstract, the authors mention that a suitable training dataset is generated to address the inconsistency. Is this a contribution of this paper? The paper should tell about it more.
+
+\textbf{Response:} \textcolor{blue}{Thank you for your valuable suggestion. \\
+(1) VidOR is a simple yet efficient dataset for multi-class and multiple objects tracking.
+We have updated our descriptions and cited this work in Section 2.1. 
+We have emphasized it in the related work as follows: \\
+\textcolor{red}{
+``First, they utilize the object detection technology to find all targets for
+each video frame in the form of a bounding box [17, 31, 41]." \\
+\textcolor{blue}{
+[31] Nima Mahmoudi, Seyed Mohammad Ahadi, and Mohammad Rahmati. 2019. Multi-target tracking using CNN-based features: CNNMTT. Multimedia Tools and Applications 78, 6 (2019), 7077–7096.
+}
+\\ \\
+}
+(2) In the revised manuscript, we have deleted Table 7 and merged it into Table 5.
+We present it in our experiments as follows: \\
+%\begin{figure}[H]
+%	\centering 
+%	\includegraphics[width=0.9\textwidth]{imgs/result_MOT_one_two_stage.png}
+%\end{figure}
+(3) After checking, we have added the missing negative sign in Equation 4 as follows: 
+%\begin{figure}[H]
+%	\centering 
+%	\includegraphics[width=0.65\textwidth]{imgs/equ_4.png}
+%\end{figure}
+(4)  Our expression is unclear in the old version.
+We introduce suitable training labels rather that training data.
+In the revised version, we have elaborated that our approach adopts the traditional data association method to generate pesudo labels on detection results, which are then feed to the \emph{association submodule} to achieve an \emph{end-to-end} training.
+The details are presented in Section 3.3 as follows: \\
+%The generation method of training dataset is a small contribution of this paper.
+%We introduce it in the second paragraph of Section 3.3,
+%and perform the traditional data association method on MOT datasets based on the bounding box generated by the pretrained \emph{detection submodule}, 
+%and utilize the output to generate the binary association matrix as the pseudo label for training the \emph{association submodule}. 
+%Finally, we emphasize it in our algorithm as follows: \\
+}
+\textcolor{red}{
+``In \emph{joint submodule}, all the object representations $R_t$, $R_{t-n}$ come from the \emph{detection submodule}, and may have data inconsistency with the tracking ground truth on MOT benchmark datasets.
+Therefore, it is difficult to implement an \emph{end-to-end} training. 
+To solve this problem, we discard the tracking ground truth, and adopt a simple yet effective traditional association method called Kalman Filter [45] to predict the locations of tracklets, resulting in tracking pseudo labels for the object representations $R_t$, $R_{t-n}$.
+According to the pseudo labels, we obtain a pseudo \emph{association matrix} $B_{t-n,t} \in {R}^{(N_m+1) \times (N_m+1)}$, where each element $b_{k,l}$ indicates the matching relationship between the object $k$ and $l$, and the added one column/row (noted as "+1" for $B_{t-n,t}$) represents object disappearance/appearance in the current frame.
+We define three values for $b_{k,l}$: $1$ indicates the same identity between the object $k$ and $l$ (called "pseudo positive pairs"), $0$ represents different ones (called "pseudo negative pairs"), and $0.5$ means uncertain.
+In the implementation, we set a high threshold in Kalman Filter to reduce the false matching for pseudo positive pairs, and set a low threshold to increase the true mismatching for pseudo negative ones. The reamining pairs are set to uncertain."} 
+\vspace{8pt} 
+
+
+\vspace{8pt}
+
+\bibliographystyle{ACM-Reference-Format}
+%\bibliography{test1}
+
+\end{document}
+
+

@@ -1,0 +1,46 @@
+#!/bin/bash
+# 查看当前工程修改的文件，按回车或者y进行推送，按n或者其他字符则取消
+# 查看状态：a s
+# 拉取代码：a u
+
+# 判断是否为git pull
+if [ $# = 1 ] && [ "$1"x = "u"x ] ; then
+	echo "git pull..."
+	git pull
+	echo "pull finish, exit."
+	exit 1;
+elif [ $# = 1 ] && [ "$1"x = "s"x ]; then
+	git status
+	echo "git status finish."
+	exit 1;
+fi
+
+is_continue='y'
+
+git status
+
+# bash shell.sh就行， ./shell.sh也可以用，，就是sh shell.sh不行
+# 解决办法为：将第一行的#!/bin/sh 改为：#!/bin/bash
+# 接受一个字符的输入，不需要回车
+read -n 1 -p 'continue?[y/n]' is_continue
+# read -p 'continue?[y/n]' is_continue
+
+# 1. 使用单个等号
+# 2. 注意到等号两边各有一个空格：这是unix shell的要求
+# 3. "$is_continue"x最后有x，因为当 $is_continue 为空的时候，上面的表达式就变成了x = nx，显然是不相等的。
+# 而如果没有这个x，表达式就会报错：[: =: unary operator expected
+if [ "$is_continue"x = "n"x ]; then
+	echo "cancel"
+	exit
+# 判断是否为直接回车（为空）或者按下y
+# [] 中的判断条件前后必须有空格
+elif [ "$is_continue"x = ""x ] || [ "$is_continue"x = "y"x ]; then
+	echo "add and push all..."
+	git add .
+	git commit -m 'auto commit'
+	git push
+	echo "add and push finish."
+else
+	echo "input error, please input y/n/(enter)"
+fi
+
