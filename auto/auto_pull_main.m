@@ -5,6 +5,11 @@
 
 clc;
 
+% C:\workspace\utils\auto
+addpath(fullfile(work_dir, 'utils', 'auto'));
+savepath
+
+
 
 %% 循环遍历所有仓库
 while true
