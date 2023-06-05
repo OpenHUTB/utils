@@ -1,7 +1,16 @@
 %% 启动后对matlab进行初始化
-% 清除变量
+% 将以下代码放置到startup.m中（位于输入userpath显示的目录）
+% 放在matlabroot/tooolbox/local/matlabrc.m中无效（原因未知）
+% 
+% init_script_path = fullfile('C:', 'workspace', 'utils', 'init_matlab.m');
+% if exist(init_script_path, 'file')
+%     eval(['cd ' fileparts(init_script_path)]);
+%     run(init_script_path);
+% end
 
-% clear;
+
+
+clear;
 % clc;  % 会清除matlab的启动警告
 %% 
 % 根据MAC地址判断是否是第一次在机器上启动
@@ -158,37 +167,3 @@ vgg19_mat_dir = fullfile(matlabshared.supportpkg.getSupportPackageRoot, '3P.inst
 vgg19_infos = "installLocation = " + vgg19_mat_dir;
 writelines(vgg19_infos, fullfile(vgg19_info_dir,'vgg19.instrset_install_info.txt'));
 end
-%% 
-% 
-% 
-% 
-% 
-% 
-% 
-% 
-% 
-% 
-% 
-% 
-% 
-% 
-% 
-% 
-% 
-% 
-% 
-% 
-% 
-% 
-% 
-% 
-% 
-% 
-% 
-% 
-% 
-% 
-% 
-% 
-% 
-%
