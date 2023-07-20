@@ -140,12 +140,12 @@
          <Stroke code="VK_F2" shift="on"/>
       </Action>
       <Action id="inc-search-forward"/>
-      <Action id="save-as">
-         <Stroke code="VK_S" ctrl="on" shift="on"/>
-      </Action>
       <Action id="copy-full-path">
          <Stroke alt="on" code="VK_C" shift="on"/>
          <Stroke code="VK_C" meta="on" shift="on"/>
+      </Action>
+      <Action id="save-as">
+         <Stroke code="VK_S" ctrl="on" shift="on"/>
       </Action>
       <Action id="launch-profiler">
          <Stroke alt="on" code="VK_P" ctrl="on"/>
@@ -233,11 +233,13 @@
       <Action id="open-selection">
          <Stroke code="VK_F3"/>
       </Action>
+      <Action follows="None" id="save-as"/>
    </Context>
    <Context id="WorkspaceBrowser">
       <Action follows="None" id="paste-to-workspace">
          <Stroke code="VK_INSERT" shift="on"/>
       </Action>
+      <Action follows="None" id="save-as"/>
    </Context>
    <Context id="MATLABEditor">
       <Action id="open-selection">
