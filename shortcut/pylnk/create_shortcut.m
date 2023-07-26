@@ -2,12 +2,12 @@
 %% 创建常用目录的快捷方式
 % py_module_path = fullfile(rep_dir, 'utils', 'shortcut', 'pylnk', 'pylnk3.py');
 
-work_dir = 'C:\BaiduSyncdisk';  % 工作路径不在C盘就在D盘下的BaiduSyncdisk目录，所有的文件都在这个目录下
+work_dir = 'D:\work';  % 工作路径不在C盘就在D盘下的BaiduSyncdisk目录，所有的文件都在这个目录下
 if ~exist(work_dir, 'dir')
     work_dir = 'D:\BaiduSyncdisk';
 end
 
-workspace_dir = 'C:\workspace';
+workspace_dir = 'D:\work';
 if ~exist(workspace_dir, 'dir')
     workspace_dir = 'C:\workspace';
 end
