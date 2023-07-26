@@ -1,6 +1,11 @@
+% 测试：find_p('D:\software\Prescan_2021.1')
+function find_p(varargin)
 
-% obj_path = 'D:\work\matlab';
-obj_path = 'D:\software\Prescan_2021.1';
+if numel(varargin) < 1 || ~exist(varargin{1}, 'dir')
+    obj_path = matlabroot;
+else
+    obj_path = varargin{1};
+end
 
 % %% The use of breadth first walk
 obj_files = RangTraversal(obj_path);
@@ -25,3 +30,4 @@ end
 dir_uniq = unique(dir_lists);
 writetable(cell2table(dir_uniq), 'dir_uniq.csv');
 
+end
