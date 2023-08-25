@@ -10,6 +10,15 @@ dst_html_path = fullfile(cur_mlx_folder, ...
 % 导出网页格式到和.mlx相同的文件夹
 export(mlx_path, dst_html_path);
 
+% 导出的html已经将.mlx换成了.html（不需要再实现了）
+% html_content_with_mlx = fileread(dst_html_path);
+% % 将.mlx文件中跳转到.mlx文件改为跳转到.html中
+% html_content = replace(html_content_with_mlx, '.mlx', '.html');
+% html_file_id = fopen(dst_html_path,'w');
+% fprintf(html_file_id, '%s', html_content);
+% fclose(html_file_id);
+
+
 % 将翻译结果部署到软件中
 start_pos = strfind(cur_mlx_folder, 'roadrunner');
 matlab_html_dir = fullfile(matlabroot, "help", ...
