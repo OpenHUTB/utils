@@ -12,6 +12,10 @@ if ~exist(workspace_dir, 'dir')
     workspace_dir = 'C:\workspace';
 end
 
+shortcut_home = fileparts(fileparts(mfilename('fullpath')));
+
+
+%%
 import py.pylnk3.*
 
 % 这里新建的快捷方式要是dong\utils\shortcut目录下的.m快捷方式保持一致
@@ -67,6 +71,8 @@ system([cmd_prefix '"' fullfile('C:', 'ProgramData', 'Microsoft', 'Windows', 'St
 system([cmd_prefix fullfile(getenv('SYSTEMROOT'), 'System32') ' ' fullfile(shortcut_dir, 'sys.lnk')]);
 % 数据目录设置为系统临时目录
 system([cmd_prefix fullfile(tempdir, 'data') ' ' fullfile(shortcut_dir, 'dat.lnk')]);
+
+
 %% 系统目录下的程序
 
 % 卸载程序
@@ -125,6 +131,8 @@ system([fullfile(cmd_and_software, 'tencent', 'QQ', 'Bin', 'QQ.exe') ' ' fullfil
 system([fullfile(cmd_and_software, 'tencent', 'WeChat', 'WeChat.exe') ' ' fullfile(shortcut_dir, 'wx.lnk')]);
 % texstudio
 system([fullfile(cmd_and_software, 'latex', 'texstudio', 'texstudio.exe') ' ' fullfile(shortcut_dir, 'tex.lnk')]);
+
+
 %% 自定义脚本
 
 % 打开希腊字母文件（使用Alt+F4关闭）
@@ -136,6 +144,15 @@ writelines('C:\Windows\System32\shutdown.exe -s -t 00', fullfile(shortcut_dir, '
 
 % 自定义缓冲目录
 system([cmd_prefix fullfile('C:', 'buffer') ' ' fullfile(shortcut_dir, 'buf.lnk')]);
+
+
+% 仅电脑屏幕
+system([cmd_prefix fullfile(shortcut_home, 'win', 'int.bat') ' ' fullfile(shortcut_dir, 'int.lnk')]);
+% 扩展屏幕
+system([cmd_prefix fullfile(shortcut_home, 'win', 'ext.bat') ' ' fullfile(shortcut_dir, 'ext.lnk')]);
+% 复制屏幕
+system([cmd_prefix fullfile(shortcut_home, 'win', 'clo.bat') ' ' fullfile(shortcut_dir, 'clo.lnk')]);
+
 
 % input_cmd = 'c C:\Windows\System32\cmd.exe shortcut.lnk';
 % system([py_path ' pylnk3.py ' input_cmd])
