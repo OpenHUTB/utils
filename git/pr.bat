@@ -12,7 +12,8 @@ set pr_id=%1
 git rev-parse --verify %pr_id% >nul 2>&1
 if %errorlevel% neq 0 (
     echo Branch %pr_id% does not exist locally. Fetching from remote...
-    git fetch origin pull/%pr_id%/head:%pr_id% && git switch %pr_id%
+    git switch %pr_id%
+    git fetch origin pull/%pr_id%/head:%pr_id%
     exit /b 1
 ) else (
     echo Branch %pr_id% exists locally. Updating it...
