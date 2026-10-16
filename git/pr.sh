@@ -6,6 +6,9 @@ fi
 
 pr_id=$1
 
+git config user.email "open@hutb.edu.cn"
+git config user.name "donghaiwang"
+
 # 判断本地是否存在名为 pr_id 的分支
 if git show-ref --verify --quiet refs/heads/$pr_id; then
     echo "Branch $pr_id already exists locally."
