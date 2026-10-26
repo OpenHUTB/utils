@@ -30,3 +30,8 @@ rem share files in C:\
 start nginx.exe
 rem nginx.exe -s reload
 rem nginx.exe -s stop
+
+rem search all nginx process
+rem tasklist /fi "imagename eq nginx.exe"
+rem Kill nginx process in any directory
+rem taskkill /f /im nginx.exe
